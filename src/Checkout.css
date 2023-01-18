@@ -1,0 +1,41 @@
+.tables{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    padding: 15px;
+    text-align: center;
+  }
+  
+.basic-info{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid grey;
+    margin-top: 15px;
+    width: 450px;
+}
+
+.billing-head{
+    text-align: center;
+}
+
+.place-order-btn{
+    /* margin-left: 32%; */
+    margin-top: 5%;
+    margin-bottom: 5%;
+    background-color: rgb(0, 102, 255);
+    border: none;
+    border-radius: 9px;
+    height: 30px;
+    padding: 9px;
+    width: 150px;
+    color: white;
+}
