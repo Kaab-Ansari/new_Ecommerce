@@ -3,8 +3,14 @@ import { Link } from "react-router-dom";
 import "./Cart.css";
 import { ProductContext } from "./Context";
 import { useNavigate } from "react-router-dom";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { border, color } from "@mui/system";
+import { auth, logInWithEmailAndPassword, signInWithGoogle } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Cart() {
+  const [user, loading, error] = useAuthState(auth);
   const { cart, handleCart, subQuantity, addQuantity } =
     useContext(ProductContext);
 
@@ -13,7 +19,8 @@ export default function Cart() {
   const navigate = useNavigate()
 
   function handleNavigate (e){
-    if(localStorage.getItem("token")){
+
+    if(user){
       navigate("/checkout")
     } else{
       alert("Please Login first")
@@ -42,19 +49,11 @@ export default function Cart() {
                     Remove from cart
                   </button>
                   <div className="quantity-btns">
-                    <button
-                      className="qty-add-btn"
-                      onClick={() => addQuantity(p.id, "+ 1")}
-                    >
-                      +
-                    </button>
-                    {p.quantity}
-                    <button
-                      className="qty-add-btn"
-                      onClick={() => subQuantity(p.id, "- 1")}
-                    >
-                      -
-                    </button>
+                  <Stack direction="row" >
+                    <Button style={{backgroundColor: "rgb(0, 102, 255 )", color: "white"}}  onClick={() => addQuantity(p.id, "+ 1")}>+</Button>
+                    <Button style={{ width: "50px", color: "black"}}>{p.quantity}</Button>
+                    <Button style={{backgroundColor: "rgb(0, 102, 255 )", color: "white"}} onClick={() => subQuantity(p.id, "- 1")}>-</Button>
+                  </Stack>
                   </div>
                 </div>
               </div>
@@ -103,3 +102,8 @@ export default function Cart() {
 //   )
 // })
 // console.log(name2)
+
+
+
+
+

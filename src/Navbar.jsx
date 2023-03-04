@@ -24,6 +24,9 @@
 // }
 
 import React, { useContext } from "react";
+import { auth, logInWithEmailAndPassword, signInWithGoogle } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -33,29 +36,23 @@ import Button from "@mui/material/Button";
 import { ProductContext } from "./Context";
 import { useNavigate } from "react-router-dom";
 import "./Nav.css";
+import { User } from "@auth0/auth0-react";
 // import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Navbar() {
+  const [user, loading, error] = useAuthState(auth);
   const { product, handleCart, cart, handleChange } =
     useContext(ProductContext);
   const navigate = useNavigate();
 
-  // const { user, isAuthenticated} = useAuth0();
-
-function handleNavigate(e){
-  // if(localStorage.getItem("token")){
-  //   navigate("/user")
-  // }
-  if(localStorage.getItem("token") && localStorage.getItem("email") ){
-    navigate("/user")
+  
+  function handleNavigate() {
+    if (user) {
+      navigate("/user");
+    } else if (!user) {
+      navigate("/log-in");
+    }
   }
-   else if(localStorage.getItem("email")){
-    navigate("/log-in")
-  }
-  else if(!localStorage.getItem("token") && !localStorage.getItem("email")){
-    navigate("/profile")
-  }
-}
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -63,13 +60,13 @@ function handleNavigate(e){
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Button color="inherit">
-            <h1
-              className="fa fa-google-wallet head"
-              onClick={() => navigate("/")}
-              style={{ fontSize: 25 }}
-            >
-              Walmart
-            </h1>
+              <h1
+                className="fa fa-google-wallet head"
+                onClick={() => navigate("/")}
+                style={{ fontSize: 25 }}
+              >
+                Walmart
+              </h1>
             </Button>
           </Typography>
           <TextField
@@ -77,9 +74,10 @@ function handleNavigate(e){
             label="Search"
             variant="outlined"
             onChange={handleChange}
+            // style={{border: "solid 2px black"}}
           />
 
-         {/* {
+          {/* {
           isAuthenticated && <h2>{user.name}</h2>
          } */}
 

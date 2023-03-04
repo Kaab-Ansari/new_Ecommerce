@@ -1,4 +1,10 @@
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import {
+  auth,
+  registerWithEmailAndPassword,
+  signInWithGoogle,
+} from "./firebase";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -24,7 +30,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://kaab-resume-exe.netlify.app/">
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}
@@ -36,31 +42,32 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const [user, loading, error] = useAuthState(auth);
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [firstname, setFirstName] = React.useState("");
   const [lastname, setLastName] = React.useState("");
-  const [error, setError] = React.useState(false);
+  const [errors, seterrors] = React.useState(false);
 
   const navigate = useNavigate();
 
-  const handleNavigate = (e) => {
-    e.preventDefault();
-    if (
-      firstname === "" ||
-      lastname === "" ||
-      password === "" ||
-      email === ""
-    ) {
-      setError(true);
-    } else {
-      localStorage.setItem("email", email);
-      localStorage.setItem("firstname", firstname);
+  // const handleNavigate = (e) => {
+  //   e.preventDefault();
+  //   if (
+  //     firstname === "" ||
+  //     lastname === "" ||
+  //     password === "" ||
+  //     email === ""
+  //   ) {
+  //     seterrors(true);
+  //   } else {
+  //     localStorage.setItem("email", email);
+  //     localStorage.setItem("firstname", firstname);
 
-
-      navigate("/log-in");
-    }
-  };
+  //     navigate("/log-in");
+  //   }
+  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -71,7 +78,15 @@ export default function SignUp() {
     });
   };
 
+  const register = () => {
+    if (!firstname) alert("Please enter name");
+    registerWithEmailAndPassword(firstname, email, password);
+  };
 
+  React.useEffect(() => {
+    if (loading) return;
+    if (user) navigate("/");
+  }, [user, loading]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -101,10 +116,10 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   onChange={(e) => {
-                    setFirstName(e.target.value), setError(false);
+                    setFirstName(e.target.value), seterrors(false);
                   }}
-                  error={error}
-                  helperText={error && "first name is required"}
+                  errors={errors}
+                  helperText={errors && "first name is required"}
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -117,10 +132,10 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   onChange={(e) => {
-                    setLastName(e.target.value), setError(false);
+                    setLastName(e.target.value), seterrors(false);
                   }}
-                  error={error}
-                  helperText={error && "last name is required"}
+                  errors={errors}
+                  helperText={errors && "last name is required"}
                   required
                   fullWidth
                   id="lastName"
@@ -132,10 +147,10 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => {
-                    setEmail(e.target.value), setError(false);
+                    setEmail(e.target.value), seterrors(false);
                   }}
-                  error={error}
-                  helperText={error && "email is required"}
+                  errors={errors}
+                  helperText={errors && "email is required"}
                   required
                   fullWidth
                   id="email"
@@ -147,10 +162,10 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => {
-                    setPassword(e.target.value), setError(false);
+                    setPassword(e.target.value), seterrors(false);
                   }}
-                  error={error}
-                  helperText={error && "password is required"}
+                  errors={errors}
+                  helperText={errors && "password is required"}
                   required
                   fullWidth
                   name="password"
@@ -174,7 +189,8 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleNavigate}
+              // onClick={handleNavigate}
+              onClick={register}
             >
               Sign Up
             </Button>

@@ -1,4 +1,6 @@
 import React, { useContext } from "react";
+import { auth, logInWithEmailAndPassword, signInWithGoogle } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 import "./App.css";
 import ReactStars from "react-rating-stars-component";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +12,34 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
 export default function Homepage() {
-  const { product, filteritem } = useContext(ProductContext);
-   console.log(product)
+  const [user, loading, error] = useAuthState(auth);
+  const { product, filteritem, cart } = useContext(ProductContext);
+  // console.log(cart);
 
-  // const [cart, setCart] = React.useState([]);
+  // const [Usercart, setUserCart] = React.useState(cart);
+  // console.log(Usercart)
+
+  React.useEffect(() => {
+    fetch(
+      `https://ecommerce-products-663af-default-rtdb.firebaseio.com/Users/${user?.uid}.json`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          cart
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }, [cart]);
+
+  React.useEffect(() => {
+    fetch(
+      `https://ecommerce-products-663af-default-rtdb.firebaseio.com/Users/${user?.uid}.json`
+    )
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }, [cart]);
 
   const firstExample = {
     size: 30,
@@ -40,8 +66,7 @@ export default function Homepage() {
             </div>
           ))}
         </div>
-      ) : (
-        product.length > 0 ?
+      ) : product.length > 0 ? (
         <div className="products">
           {product.map((p) => (
             <div
@@ -57,12 +82,13 @@ export default function Homepage() {
             </div>
           ))}
         </div>
-      :
-       <div className="loader">
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    </div> )}
+      ) : (
+        <div className="loader">
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+        </div>
+      )}
       ;
     </div>
   );

@@ -10,6 +10,7 @@ import Profile from "./Profile";
 import Login from "./Login";
 import UserPage from "./UserPage";
 import { useLocation } from "react-router-dom";
+import Reset from "./Reset";
 
 export default function App() {
   let location = useLocation();
@@ -25,6 +26,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/log-in" element={<Login />} />
+        <Route path="/reset" element={<Reset />} />
         <Route path="/user" element={<UserPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/confirmed" element={<Placeorder />} />
