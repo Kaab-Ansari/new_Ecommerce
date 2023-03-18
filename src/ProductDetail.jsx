@@ -39,8 +39,8 @@ export default function ProductDetail() {
     <div>
       <div className="pro">
         <div className="it" key={p.id}>
+        <div className="about-product">
           <img className="imge" src={p.image} />
-          <div className="about-product">
             <h2 className="titles">{p.title}</h2>
             <p className="ratings">⭐ {p.rating.rate}</p>
             <h2 className="prices">${p.price}</h2>

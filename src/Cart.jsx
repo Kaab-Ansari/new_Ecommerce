@@ -50,7 +50,7 @@ export default function Cart() {
                   </button>
                   <div className="quantity-btns">
                   <Stack direction="row" >
-                    <Button style={{backgroundColor: "rgb(0, 102, 255 )", color: "white"}}  onClick={() => addQuantity(p.id, "+ 1")}>+</Button>
+                    <Button style={{ backgroundColor: "rgb(0, 102, 255 )", color: "white"}}  onClick={() => addQuantity(p.id, "+ 1")}>+</Button>
                     <Button style={{ width: "50px", color: "black"}}>{p.quantity}</Button>
                     <Button style={{backgroundColor: "rgb(0, 102, 255 )", color: "white"}} onClick={() => subQuantity(p.id, "- 1")}>-</Button>
                   </Stack>
