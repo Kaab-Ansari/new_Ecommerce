@@ -35,7 +35,7 @@ function ProductContextProvider(props) {
 
     if (handleCartFunction) {
       const removeFromCart = cart.filter((p) => p.id !== id);
-      //   console.log(removeFromCart)
+        // console.log(removeFromCart)
       setCart(removeFromCart);
     } else {
       const products = product.find((product) => product.id === id);
